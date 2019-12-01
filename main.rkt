@@ -134,11 +134,18 @@
     (MODE1)))
 |#
 
-;MODE3
+;MODE3 BY KZ
 ;button/switch check
 (on-button-pressed button
                    (λ ()
-                            (printf "ButtonClick\n" )
+                     (printf "ButtonClick\n" )
+                     ;stoping main loop
+                     (displayln "mapin loop sto")
+                     
+                     
+                     
+
+                     
                             (digital-write led1R HIGH)
                             (digital-write led2R HIGH)
                             (digital-write led3R HIGH)
