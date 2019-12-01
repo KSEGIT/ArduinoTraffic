@@ -54,15 +54,6 @@
 
 ;(on-button-pressed switch (lambda () (gotoNextState "e")))
 
-; pins we're using for car lights (as a set)
-(define lights1 (list led1R led1Y led1G ))
-(define lights2 (list led2R led2Y led2G ))
-(define lights3 (list led3R led3Y led3G ))
-
-(define lightSequence1 ( list (list 1 0 0 ) (list 1 1 0) (list 0 0 1) (list 0 1 0) ))
-(define lightSequence2 ( list (list 0 0 1 ) (list 0 1 0) (list 1 0 0) (list 0 1 0) ))
-(define lightSequence3 ( list (list 1 0 0 ) (list 1 0 0) (list 1 0 0) (list 0 1 0) ))
-
 ; helper for changing pins voltage
 (define setLights (lambda (lightPins vals) 
                     (cond [(not (empty? lightPins))
@@ -81,8 +72,17 @@
                     )
   )
 
-;MODE2
 
+
+; pins we're using for car lights (as a set)
+(define lights1 (list led1R led1Y led1G ))
+(define lights2 (list led2R led2Y led2G ))
+(define lights3 (list led3R led3Y led3G ))
+
+
+(define lightSequence1 ( list (list 0 0 1 ) (list 0 1 0) (list 1 0 0) (list 1 0 0) (list 1 0 0) (list 1 1 0)))
+(define lightSequence2 ( list (list 1 0 0 ) (list 1 1 0) (list 0 0 1) (list 0 1 0) (list 1 0 0) (list 1 0 0)))
+(define lightSequence3 ( list (list 1 0 0 ) (list 1 0 0) (list 1 0 0) (list 1 1 0) (list 0 0 1) (list 1 0 0)))
 
 ; take a list of light settings and cycle through them repeatedly forever.
 (define mainloop (lambda (seq1 seq2 seq3)
@@ -99,7 +99,9 @@
                             (sleep 3)
                             ; recurse, putting the head of the list at the end of the sequence
                             ; that way, we keep going around the sequence forever.
-                            (lmainloop 
+
+                            (mainloop 
+
                              (append (rest seq1) (list (first seq1))
                                      )
                              (append (rest seq2) (list (first seq2))
@@ -137,5 +139,5 @@
 
 ;START
 (setup)
-(lightCycle lightSequence1 lightSequence2 lightSequence3)
+(mainloop lightSequence1 lightSequence2 lightSequence3)
 
