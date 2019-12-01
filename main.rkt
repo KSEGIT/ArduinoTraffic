@@ -81,11 +81,11 @@
                     )
   )
 
-;MODE2
+;MODE3
 
 
 ; take a list of light settings and cycle through them repeatedly forever.
-(define mainloop (lambda (seq1 seq2 seq3)
+(define lightCycle (lambda (seq1 seq2 seq3)
                      (cond [(not (empty? seq1))
                             ;pedestrian goes red
                             (digital-write ledPR HIGH)
@@ -99,7 +99,7 @@
                             (sleep 3)
                             ; recurse, putting the head of the list at the end of the sequence
                             ; that way, we keep going around the sequence forever.
-                            (lmainloop 
+                            (lightCycle 
                              (append (rest seq1) (list (first seq1))
                                      )
                              (append (rest seq2) (list (first seq2))
@@ -118,20 +118,9 @@
 
 ;MODE3
 ;button/switch check
-(on-button-pressed button
-                   (λ ()
+(on-button-pressed button (lambda ()
                             (printf "ButtonClick\n" )
-                            (digital-write led1R HIGH)
-                            (digital-write led2R HIGH)
-                            (digital-write led3R HIGH)
-                            (digital-write ledPR HIGH)
-                            (sleep 3)
-                            (digital-write ledPR LOW)
-                            (digital-write ledPG HIGH)
-                     (sleep 5)
-                     (digital-write ledPR HIGH)
-                            (digital-write ledPG LOW)
-                     
+
                             ))
 
 
