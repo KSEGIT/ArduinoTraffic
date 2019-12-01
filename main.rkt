@@ -35,7 +35,7 @@
     (set-pin-mode ledPG OUTPUT_MODE)
     
 
-    ;; Turn the  lights off
+    ;; Turn the lights off before start
     (digital-write led1R LOW)
     (digital-write led1Y LOW)
     (digital-write led1G LOW)
@@ -72,12 +72,13 @@
                     )
   )
 
-;;;;;;;;;;;MODE2
+
 
 ; pins we're using for car lights (as a set)
 (define lights1 (list led1R led1Y led1G ))
 (define lights2 (list led2R led2Y led2G ))
 (define lights3 (list led3R led3Y led3G ))
+
 
 (define lightSequence1 ( list (list 0 0 1 ) (list 0 1 0) (list 1 0 0) (list 1 0 0) (list 1 0 0) (list 1 1 0)))
 (define lightSequence2 ( list (list 1 0 0 ) (list 1 1 0) (list 0 0 1) (list 0 1 0) (list 1 0 0) (list 1 0 0)))
@@ -98,7 +99,9 @@
                             (sleep 3)
                             ; recurse, putting the head of the list at the end of the sequence
                             ; that way, we keep going around the sequence forever.
+
                             (mainloop 
+
                              (append (rest seq1) (list (first seq1))
                                      )
                              (append (rest seq2) (list (first seq2))
@@ -116,11 +119,21 @@
 
 
 ;MODE3
-
 ;button/switch check
-(on-button-pressed button (lambda ()
+(on-button-pressed button
+                   (λ ()
                             (printf "ButtonClick\n" )
-
+                            (digital-write led1R HIGH)
+                            (digital-write led2R HIGH)
+                            (digital-write led3R HIGH)
+                            (digital-write ledPR HIGH)
+                            (sleep 3)
+                            (digital-write ledPR LOW)
+                            (digital-write ledPG HIGH)
+                     (sleep 5)
+                     (digital-write ledPR HIGH)
+                            (digital-write ledPG LOW)
+                     
                             ))
 
 
