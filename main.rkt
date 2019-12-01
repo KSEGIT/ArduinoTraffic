@@ -51,9 +51,6 @@
     ) ;; end of lambda
   ) ;; end of setup
 
-
-;(on-button-pressed switch (lambda () (gotoNextState "e")))
-
 ; helper for changing pins voltage
 (define setLights (lambda (lightPins vals) 
                     (cond [(not (empty? lightPins))
@@ -86,6 +83,7 @@
 
 ; take a list of light settings and cycle through them repeatedly forever.
 (define mainloop (lambda (seq1 seq2 seq3)
+                   ;we use this check to stop function (from button)
                      (cond [(not (empty? seq1))
                             ;pedestrian goes red
                             (digital-write ledPR HIGH)
@@ -96,7 +94,7 @@
                             (setLights lights3 (first seq3))
                             ; arbitrary sleep time?
                             ; could put into the sequence?
-                            (sleep 3)
+                            (sleep 2)
                             ; recurse, putting the head of the list at the end of the sequence
                             ; that way, we keep going around the sequence forever.
 
@@ -116,7 +114,25 @@
 
 
 ;MODE1
+#|
 
+;(on-button-pressed switch (lambda () (gotoNextState "e")))
+
+(define MODE1
+  (begin
+    (digital-write SWITCH HIGH)
+    (digital-write LEDP1 HIGH)
+    (digital-write LEDY1 HIGH)
+    (sleep 0.2)
+    (digital-write LEDY1 LOW)
+    (digital-write LEDY2 HIGH)
+    (sleep 0.2)
+    (digital-write LEDY2 LOW)
+    (digital-write LEDY13 HIGH)
+    (sleep 0.2)
+    (digital-write LEDY3 LOW)
+    (MODE1)))
+|#
 
 ;MODE3
 ;button/switch check
@@ -130,8 +146,8 @@
                             (sleep 3)
                             (digital-write ledPR LOW)
                             (digital-write ledPG HIGH)
-                     (sleep 5)
-                     (digital-write ledPR HIGH)
+                            (sleep 8)
+                            (digital-write ledPR HIGH)
                             (digital-write ledPG LOW)
                      
                             ))
