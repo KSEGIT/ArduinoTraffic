@@ -35,7 +35,7 @@
     (set-pin-mode ledPG OUTPUT_MODE)
     
 
-    ;; Turn the  lights off
+    ;; Turn the lights off before start
     (digital-write led1R LOW)
     (digital-write led1Y LOW)
     (digital-write led1G LOW)
@@ -60,8 +60,8 @@
 (define lights3 (list led3R led3Y led3G ))
 
 (define lightSequence1 ( list (list 1 0 0 ) (list 1 1 0) (list 0 0 1) (list 0 1 0) ))
-(define lightSequence2 ( list (list 0 0 1 ) (list 0 1 0) (list 0 0 1) (list 0 1 0) ))
-(define lightSequence3 ( list (list 1 0 0 ) (list 1 1 0) (list 0 0 1) (list 0 1 0) ))
+(define lightSequence2 ( list (list 0 0 1 ) (list 0 1 0) (list 1 0 0) (list 0 1 0) ))
+(define lightSequence3 ( list (list 1 0 0 ) (list 1 0 0) (list 1 0 0) (list 0 1 0) ))
 
 ; helper for changing pins voltage
 (define setLights (lambda (lightPins vals) 
@@ -117,7 +117,6 @@
 
 
 ;MODE3
-
 ;button/switch check
 (on-button-pressed button (lambda ()
                             (printf "ButtonClick\n" )
