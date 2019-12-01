@@ -87,13 +87,11 @@
                      (cond [(not (empty? seq1))
                             ;pedestrian goes red
                             (digital-write ledPR HIGH)
-                            
-                            
+
                             (setLights lights1 (first seq1))
                             (setLights lights2 (first seq2))
                             (setLights lights3 (first seq3))
-                            ; arbitrary sleep time?
-                            ; could put into the sequence?
+                           
                             (sleep 2)
                             ; recurse, putting the head of the list at the end of the sequence
                             ; that way, we keep going around the sequence forever.
