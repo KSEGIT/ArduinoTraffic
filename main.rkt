@@ -170,7 +170,8 @@
                             (sleep 8)
                             (digital-write ledPR HIGH)
                             (digital-write ledPG LOW)
-                     
+                            (set! loopstop 0)
+                            (mainloop lightSequence1 lightSequence2 lightSequence3)
                             ))
 
 
