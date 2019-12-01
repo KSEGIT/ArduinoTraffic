@@ -14,7 +14,7 @@
 (define button 4)
 (define ledPR 3)
 (define ledPG 2)
-;(define switch 1)
+(define switch 1)
 
 (define setup 
   (lambda ()
@@ -30,9 +30,10 @@
     (set-pin-mode led3R OUTPUT_MODE)
     (set-pin-mode led3Y OUTPUT_MODE)
     (set-pin-mode led3G OUTPUT_MODE)
-    (set-pin-mode button INPUT_MODE)
     (set-pin-mode ledPR OUTPUT_MODE)
     (set-pin-mode ledPG OUTPUT_MODE)
+    (set-pin-mode button INPUT_MODE)
+    ;(set-pin-mode switch INPUT_MODE)
     
 
     ;; Turn the lights off before start
@@ -76,15 +77,18 @@
 (define lights2 (list led2R led2Y led2G ))
 (define lights3 (list led3R led3Y led3G ))
 
-
 (define lightSequence1 ( list (list 0 0 1 ) (list 0 1 0) (list 1 0 0) (list 1 0 0) (list 1 0 0) (list 1 1 0)))
 (define lightSequence2 ( list (list 1 0 0 ) (list 1 1 0) (list 0 0 1) (list 0 1 0) (list 1 0 0) (list 1 0 0)))
 (define lightSequence3 ( list (list 1 0 0 ) (list 1 0 0) (list 1 0 0) (list 1 1 0) (list 0 0 1) (list 1 0 0)))
 
+(define loopstop 0)
+
 ; take a list of light settings and cycle through them repeatedly forever.
 (define mainloop (lambda (seq1 seq2 seq3)
                    ;we use this check to stop function (from button)
-                     (cond [(not (empty? seq1))
+                     ;(cond [(not (empty? seq1))
+                     ;(cond [(equal? loopstop 1)
+                     (cond [(not (equal? loopstop 1))       
                             ;pedestrian goes red
                             (digital-write ledPR HIGH)
 
@@ -113,9 +117,20 @@
 
 ;MODE1
 #|
+(on-button-pressed button (lambda ()
+                            ;stoping main loop
+                            (displayln "main loop stop")
+                            (set! loopstop 1)
+                            ;starting emergency lights
+                            (displayln "main loop stop")
 
-;(on-button-pressed switch (lambda () (gotoNextState "e")))
+                            
 
+
+                            ))
+
+|#
+#|
 (define MODE1
   (begin
     (digital-write SWITCH HIGH)
@@ -138,7 +153,8 @@
                    (λ ()
                      (printf "ButtonClick\n" )
                      ;stoping main loop
-                     (displayln "mapin loop sto")
+                     (displayln "main loop stop")
+                     (set! loopstop 1)
                      
                      
                      
