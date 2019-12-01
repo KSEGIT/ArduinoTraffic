@@ -116,20 +116,25 @@
 
 
 ;MODE1
-#|
+(define dimlights (lambda ()
+                   (digital-write LEDP1 HIGH)
+                   (digital-write LEDY1 HIGH)
+                    ))
+
 (on-button-pressed button (lambda ()
                             ;stoping main loop
                             (displayln "main loop stop")
                             (set! loopstop 1)
                             ;starting emergency lights
-                            (displayln "main loop stop")
-
                             
 
+                            ;restarting loop
+                            (displayln "main loop start")
+                            (set! loopstop 0)
+                            (mainloop lightSequence1 lightSequence2 lightSequence3)
+                             ))
 
-                            ))
 
-|#
 #|
 (define MODE1
   (begin
@@ -146,7 +151,7 @@
     (digital-write LEDY3 LOW)
     (MODE1)))
 |#
-
+#|
 ;MODE3 BY KZ
 ;button/switch check
 (on-button-pressed button
@@ -173,7 +178,7 @@
                      
                             ))
 
-
+|#
 ;START
 (setup)
 (mainloop lightSequence1 lightSequence2 lightSequence3)
