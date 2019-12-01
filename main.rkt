@@ -16,6 +16,20 @@
 (define ledPG 2)
 (define switch 1)
 
+(define lightoff (lambda ()
+    (digital-write led1R LOW)
+    (digital-write led1Y LOW)
+    (digital-write led1G LOW)
+    (digital-write led2R LOW)
+    (digital-write led2Y LOW)
+    (digital-write led2G LOW)
+    (digital-write led3R LOW)
+    (digital-write led3Y LOW)
+    (digital-write led3G LOW)
+    (digital-write ledPR LOW)
+    (digital-write ledPG LOW)
+                   ))
+
 (define setup 
   (lambda ()
     ;; connect to the Arduino:
@@ -37,17 +51,7 @@
     
 
     ;; Turn the lights off before start
-    (digital-write led1R LOW)
-    (digital-write led1Y LOW)
-    (digital-write led1G LOW)
-    (digital-write led2R LOW)
-    (digital-write led2Y LOW)
-    (digital-write led2G LOW)
-    (digital-write led3R LOW)
-    (digital-write led3Y LOW)
-    (digital-write led3G LOW)
-    (digital-write ledPR LOW)
-    (digital-write ledPG LOW)
+    (lightoff)
     
     ) ;; end of lambda
   ) ;; end of setup
@@ -116,6 +120,7 @@
 
 
 ;MODE1
+#|
 (define dimlights (lambda ()
                    (digital-write LEDP1 HIGH)
                    (digital-write LEDY1 HIGH)
@@ -134,7 +139,7 @@
                             (mainloop lightSequence1 lightSequence2 lightSequence3)
                              ))
 
-
+|#
 #|
 (define MODE1
   (begin
@@ -151,35 +156,37 @@
     (digital-write LEDY3 LOW)
     (MODE1)))
 |#
-#|
+
 ;MODE3 BY KZ
 ;button/switch check
 (on-button-pressed button
                    (λ ()
                      (printf "ButtonClick\n" )
+                     
                      ;stoping main loop
                      (displayln "main loop stop")
                      (set! loopstop 1)
-                     
-                     
-                     
-
-                     
-                            (digital-write led1R HIGH)
-                            (digital-write led2R HIGH)
-                            (digital-write led3R HIGH)
-                            (digital-write ledPR HIGH)
-                            (sleep 3)
-                            (digital-write ledPR LOW)
-                            (digital-write ledPG HIGH)
-                            (sleep 8)
-                            (digital-write ledPR HIGH)
-                            (digital-write ledPG LOW)
-                            (set! loopstop 0)
-                            (mainloop lightSequence1 lightSequence2 lightSequence3)
+                     ;making sure that the loop stops
+                     (sleep 1)
+                     ;switching lights)
+                     (lightoff)
+                     (digital-write led1R HIGH)
+                     (digital-write led2R HIGH)
+                     (digital-write led3R HIGH)
+                     (digital-write ledPR HIGH)
+                     (sleep 3)
+                     (digital-write ledPR LOW)
+                     (digital-write ledPG HIGH)
+                     (sleep 8)
+                     (digital-write ledPR HIGH)
+                     (digital-write ledPG LOW)
+                     ;starting main loop
+                     (displayln "main loop start")
+                     (set! loopstop 0)
+                     (mainloop lightSequence1 lightSequence2 lightSequence3)
                             ))
 
-|#
+
 ;START
 (setup)
 (mainloop lightSequence1 lightSequence2 lightSequence3)
