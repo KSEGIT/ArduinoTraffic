@@ -4,8 +4,8 @@
 ; Run through the sequence of states for a single traffic light; time delay between each state transition.
 ; 
 
-(require "AsipMain.rkt")
-;(require "AsipSimulated.rkt")
+;(require "AsipMain.rkt")
+(require "AsipSimulated.rkt")
 
 ;(define led1 10)
 (define led1 11)
