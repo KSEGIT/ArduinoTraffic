@@ -2,6 +2,7 @@
 (require "AsipMain.rkt")
 (require "AsipButtons.rkt")
 
+;defining our outputs
 (define led1R 13)
 (define led1Y 12)
 (define led1G 11)
@@ -14,8 +15,9 @@
 (define button 4)
 (define ledPR 3)
 (define ledPG 2)
-(define switch 1)
+;(define switch 1)
 
+;all light off helper 
 (define lightoff (lambda ()
     (digital-write led1R LOW)
     (digital-write led1Y LOW)
@@ -35,6 +37,7 @@
     ;; connect to the Arduino:
     (open-asip)
 
+    ;setting arduino modes
     (set-pin-mode led1R OUTPUT_MODE)
     (set-pin-mode led1Y OUTPUT_MODE)
     (set-pin-mode led1G OUTPUT_MODE)
@@ -48,6 +51,7 @@
     (set-pin-mode ledPG OUTPUT_MODE)
     (set-pin-mode button INPUT_MODE)
     ;(set-pin-mode switch INPUT_MODE)
+    ;(set-pin-mode! a  INPUT_PULLUP_MODE)
     
 
     ;; Turn the lights off before start
@@ -85,7 +89,13 @@
 (define lightSequence2 ( list (list 1 0 0 ) (list 1 1 0) (list 0 0 1) (list 0 1 0) (list 1 0 0) (list 1 0 0)))
 (define lightSequence3 ( list (list 1 0 0 ) (list 1 0 0) (list 1 0 0) (list 1 1 0) (list 0 0 1) (list 1 0 0)))
 
+;flag for stoping loop
 (define loopstop 0)
+
+;loop starter
+(define main_restart (lambda ()
+                       (mainloop lightSequence1 lightSequence2 lightSequence3)
+                       ))
 
 ; take a list of light settings and cycle through them repeatedly forever.
 (define mainloop (lambda (seq1 seq2 seq3)
@@ -120,10 +130,21 @@
 
 
 ;MODE1
-#|
 (define dimlights (lambda ()
-                   (digital-write LEDP1 HIGH)
-                   (digital-write LEDY1 HIGH)
+                    (lightoff)
+                    (digital-write led1Y HIGH)
+                    (digital-write led2Y HIGH)
+                    (digital-write led3Y HIGH)
+                    (digital-write ledPR HIGH)
+                    (sleep 0.8)
+                    (lightoff)
+                    (sleep 0.8)
+                    (on-button-pressed button (lambda ()
+                                                (set! loopstop 0)
+                                                (main_restart)
+                                                (displayln "main loop start")    
+                                                ))
+                    (dimlights)
                     ))
 
 (on-button-pressed button (lambda ()
@@ -131,34 +152,17 @@
                             (displayln "main loop stop")
                             (set! loopstop 1)
                             ;starting emergency lights
-                            
+                            (dimlights)
 
                             ;restarting loop
                             (displayln "main loop start")
                             (set! loopstop 0)
-                            (mainloop lightSequence1 lightSequence2 lightSequence3)
+                            (main_restart)
                              ))
 
-|#
 #|
-(define MODE1
-  (begin
-    (digital-write SWITCH HIGH)
-    (digital-write LEDP1 HIGH)
-    (digital-write LEDY1 HIGH)
-    (sleep 0.2)
-    (digital-write LEDY1 LOW)
-    (digital-write LEDY2 HIGH)
-    (sleep 0.2)
-    (digital-write LEDY2 LOW)
-    (digital-write LEDY13 HIGH)
-    (sleep 0.2)
-    (digital-write LEDY3 LOW)
-    (MODE1)))
-|#
-
 ;MODE3 BY KZ
-;button/switch check
+;button check
 (on-button-pressed button
                    (λ ()
                      (printf "ButtonClick\n" )
@@ -177,16 +181,17 @@
                      (sleep 3)
                      (digital-write ledPR LOW)
                      (digital-write ledPG HIGH)
-                     (sleep 8)
+                     (sleep 3)
                      (digital-write ledPR HIGH)
                      (digital-write ledPG LOW)
                      ;starting main loop
                      (displayln "main loop start")
                      (set! loopstop 0)
-                     (mainloop lightSequence1 lightSequence2 lightSequence3)
+                     (main_restart)
                             ))
 
 
+|#
 ;START
 (setup)
 (mainloop lightSequence1 lightSequence2 lightSequence3)
