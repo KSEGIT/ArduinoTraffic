@@ -2,7 +2,7 @@
 (require "AsipMain.rkt")
 (require "AsipButtons.rkt")
 
-;defining our outputs
+;defining our pins for outputs
 (define led1R 13)
 (define led1Y 12)
 (define led1G 11)
@@ -16,6 +16,8 @@
 (define ledPR 3)
 (define ledPG 2)
 ;(define switch 1)
+;(define LDR 4)
+
 
 ;all light off helper 
 (define lightoff (lambda ()
@@ -51,7 +53,8 @@
     (set-pin-mode ledPG OUTPUT_MODE)
     (set-pin-mode button INPUT_MODE)
     ;(set-pin-mode switch INPUT_MODE)
-    ;(set-pin-mode! a  INPUT_PULLUP_MODE)
+    ;(set-pin-mode LDR  INPUT_PULLUP_MODE)
+   
     
 
     ;; Turn the lights off before start
@@ -111,6 +114,15 @@
                             (setLights lights3 (first seq3))
                            
                             (sleep 2)
+
+
+                            ;trying to solve the issue 
+                            (on-button-pressed button
+                                               (λ ()
+                                                 (printf "ButtonClick\n" )
+                                                 (pede)
+                     
+                            ))
                             ; recurse, putting the head of the list at the end of the sequence
                             ; that way, we keep going around the sequence forever.
 
@@ -128,7 +140,7 @@
                      )
   )
 
-
+#|
 ;MODE1
 (define dimlights (lambda ()
                     (lightoff)
@@ -139,6 +151,7 @@
                     (sleep 0.8)
                     (lightoff)
                     (sleep 0.8)
+                    ;this thosent work why?????????????
                     (on-button-pressed button (lambda ()
                                                 (set! loopstop 0)
                                                 (main_restart)
@@ -151,22 +164,21 @@
                             ;stoping main loop
                             (displayln "main loop stop")
                             (set! loopstop 1)
+                            (sleep 1)
                             ;starting emergency lights
                             (dimlights)
 
                             ;restarting loop
-                            (displayln "main loop start")
-                            (set! loopstop 0)
-                            (main_restart)
+                            ;(displayln "main loop start")
+                            ;(set! loopstop 0)
+                            ;(main_restart)
                              ))
+|#
 
-#|
 ;MODE3 BY KZ
 ;button check
-(on-button-pressed button
-                   (λ ()
-                     (printf "ButtonClick\n" )
-                     
+
+(define pede (lambda ()
                      ;stoping main loop
                      (displayln "main loop stop")
                      (set! loopstop 1)
@@ -181,17 +193,26 @@
                      (sleep 3)
                      (digital-write ledPR LOW)
                      (digital-write ledPG HIGH)
-                     (sleep 3)
+                     (sleep 7)
                      (digital-write ledPR HIGH)
                      (digital-write ledPG LOW)
                      ;starting main loop
                      (displayln "main loop start")
                      (set! loopstop 0)
+                     ;(setup)
                      (main_restart)
-                            ))
+                     ))
+
+;trying to make it work
+(on-button-pressed button
+                   (λ ()
+                     (printf "ButtonClick\n" )
+                     (pede)
+                     ))
 
 
-|#
+;;LDR CHECK (WORK IN PROGRESS)
+
 ;START
 (setup)
 (mainloop lightSequence1 lightSequence2 lightSequence3)
