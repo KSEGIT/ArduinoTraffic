@@ -1,4 +1,4 @@
 # ArduinoTraffic
 Middlesex University 2019
 
-test 1
+Arduino and Dr. Racket Code for the first year traffic junction project
